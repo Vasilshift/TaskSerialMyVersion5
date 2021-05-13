@@ -6,7 +6,7 @@ public class Main130521 {
         Animal[] pets = {new Animal("Cat"), new Animal("Dog")};
         System.out.println(Arrays.toString(pets));
         byte [] petsAsBytes = getByteArrayFromAnyObejct(pets);
-        pets = null;
+        //pets = null;
         pets = getAnimalsFromByteArray(petsAsBytes);
         System.out.println("Животные после \"воскрешения\" из байтового массива:");
         System.out.println(Arrays.toString(pets));
@@ -23,14 +23,17 @@ public class Main130521 {
         return byteArrayRet.toByteArray();
     }
     private static Animal[] getAnimalsFromByteArray(byte [] animalsAsBytes){
-        Animal[] animals = new Animal[0];
+        Animal[] animals = null;
         try {
-            ObjectInputStream objInpStream = new ObjectInputStream(
-                    new BufferedInputStream(
-                            new ByteArrayInputStream(animalsAsBytes)));
-            animals = (Animal[])objInpStream.readObject();
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(animalsAsBytes));
+            int numAnimals = ois.readInt();
+            animals = new Animal[numAnimals];
+            for (int i = 0; i < numAnimals; i++) {
+                animals[i] = (Animal) ois.readObject();
+            }
+            ois.close();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
         return animals;
     }

@@ -14,8 +14,7 @@ public class Main130521 {
     private static byte [] getByteArrayFromAnyObejct(Object transformObj) {
         ByteArrayOutputStream byteArrayRet = new ByteArrayOutputStream();
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(
-                    new BufferedOutputStream(byteArrayRet));
+            ObjectOutputStream oos = new ObjectOutputStream(byteArrayRet);
             oos.writeObject(transformObj);
             oos.flush();
         } catch (IOException e) {
